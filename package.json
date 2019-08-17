@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon -w src --exec yarn run serve",
     "fix": "eslint src --fix",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "precommit": "yarn run lint"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "eslint": "^6.1.0",
+    "husky": "^3.0.4",
     "nodemon": "^1.19.1"
   },
   "dependencies": {
