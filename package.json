@@ -4,7 +4,12 @@
   "description": "A sample app on node ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && npx babel src -d dist",
+    "serve": "yarn run build && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -w src --exec yarn run serve",
+    "fix": "eslint src --fix",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
@@ -15,5 +20,15 @@
   "bugs": {
     "url": "https://github.com/ramoh/hobnob/issues"
   },
-  "homepage": "https://github.com/ramoh/hobnob#readme"
+  "homepage": "https://github.com/ramoh/hobnob#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "eslint": "^6.1.0",
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4"
+  }
 }
