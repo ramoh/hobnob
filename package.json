@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && npx babel src -d dist",
     "serve": "yarn run build && node dist/index.js",
+    "test:e2e": "cucumber-js spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon -w src --exec yarn run serve",
     "fix": "eslint src --fix",
@@ -27,6 +28,8 @@
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "cucumber": "^5.1.0",
     "eslint": "^6.1.0",
     "husky": "^3.0.4",
     "nodemon": "^1.19.1"
