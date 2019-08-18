@@ -28,13 +28,14 @@
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
     "cucumber": "^5.1.0",
     "eslint": "^6.1.0",
     "husky": "^3.0.4",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "superagent": "^5.1.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.4.4"
+    "@babel/polyfill": "^7.4.4",
+    "dotenv": "^8.1.0"
   }
 }
