@@ -1,3 +1,4 @@
+
 Feature: Create User
 
   Client should be able to send a request to out API in order to create a user.
