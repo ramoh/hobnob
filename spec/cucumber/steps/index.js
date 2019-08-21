@@ -2,6 +2,7 @@ import superagent from 'superagent';
 import {When, Then} from 'cucumber';
 import assert from 'assert';
 import dotenv from 'dotenv';
+import {getValidPayload, convertStringToArray} from './utils';
 
 dotenv.config();
 
@@ -100,15 +101,13 @@ When(/^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are)(\
 });
 
 When(/^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are) exactly (.+)$/, function (payloadType, fields, value) {
-    const payload = {
-        email: 'e@ma.il',
-        password: 'password',
-    };
-    const fieldsToModify = fields.split(',').map(s => s.trim()).filter(s => s !== '');
+    this.requestPayload = getValidPayload(payloadType);
+    const fieldsToModify = convertStringToArray(fields);
+
     fieldsToModify.forEach((field) => {
-        payload[field] = value;
+        this.requestPayload[field] = value;
     });
     this.request
-        .send(JSON.stringify(payload))
+        .send(JSON.stringify(this.requestPayload))
         .set('Content-Type', 'application/json');
 });
