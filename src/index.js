@@ -41,7 +41,7 @@ function checkContentTypeIsJson(req, res, next) {
     if (!req.headers['content-type'].includes('application/json')) {
         res.status(415);
         res.set('Content-Type', 'application/json');
-        res.json({message: 'The "Content-Type" header must always be "application/json"'});
+        res.json({message: 'Content type header should always be JSON'});
     }
     next();
 }
@@ -62,8 +62,16 @@ app.use((err, req, res, next) => {
     next();
 });
 
-app.post('/user', (req, res, next) => {
-    next()
+app.post('/users', (req, res, next) => {
+    if (!Object.prototype.hasOwnProperty.call(req.body, 'email')
+        || !Object.prototype.hasOwnProperty.call(req.body, 'password')) {
+        res.status(400);
+        res.set('Content-Type', 'application/json');
+        res.json({
+            message: 'Payload must contain at least the email and password fields'
+        });
+    }
+    next();
 });
 
 
