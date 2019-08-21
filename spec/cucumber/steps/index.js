@@ -71,19 +71,30 @@ When(/^attaches an? (.+) payload which is missing the ([a-zA-Z0-9, ]+) fields?$/
         .set('Content-Type', 'application/json');
 });
 
-//
-// Then(/^contains a message property which says "Payload should be in JSON format"$/, function () {
-//     assert.strictEqual(this.responsePayload.message, 'Payload should be in JSON format');
-// });
-// Then(/^contains a message property which says "Content type header should always be JSON"$/, function () {
-//     assert.strictEqual(this.responsePayload.message, 'The "Content-Type" header must always be "application/json"');
-// });
-// Then(/^contains a message property which says "Payload should not be empty"$/, function () {
-//     assert.strictEqual(this.responsePayload.message, 'Payload should not be empty');
-// });
-
 
 Then(/^contains a message property which says "([^"]*)"$/, function (arg1) {
     assert.strictEqual(this.responsePayload.message, arg1);
 });
 
+
+When(/^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are)(\s+not)? a ([a-zA-Z]+)$/, function (payloadType, fields, invert, type) {
+    const payload = {
+        email: 'e@ma.il',
+        password: 'password',
+    };
+    const typeKey = type.toLowerCase();
+    const invertKey = invert ? 'not' : 'is';
+    const sampleValues = {
+        string: {
+            is: 'string',
+            not: 10,
+        },
+    };
+    const fieldsToModify = fields.split(',').map(s => s.trim()).filter(s => s !== '');
+    fieldsToModify.forEach((field) => {
+        payload[field] = sampleValues[typeKey][invertKey];
+    });
+    this.request
+        .send(JSON.stringify(payload))
+        .set('Content-Type', 'application/json');
+});
