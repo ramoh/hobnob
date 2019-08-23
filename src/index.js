@@ -8,7 +8,7 @@ dotenv.config();
 const client = new elasticsearch.Client({
     host: `${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
 });
-console.log(`${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`);
+console.log(`>>>>>>>${process.env.ELASTICSEARCH_INDEX}`);
 
 
 const PAYLOAD_LIMIT = 1e6;
@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
     next();
 });
 
-app.post('/users', (req, res ) => {
+app.post('/users', (req, res) => {
     if (!Object.prototype.hasOwnProperty.call(req.body, 'email')
         || !Object.prototype.hasOwnProperty.call(req.body, 'password')) {
         res.status(400);
@@ -95,7 +95,7 @@ app.post('/users', (req, res ) => {
         return;
     }
     client.index({
-        index: 'hobnob',
+        index: process.env.ELASTICSEARCH_INDEX,
         type: 'user',
         body: req.body,
     }).then((result) => {

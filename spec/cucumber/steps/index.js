@@ -11,6 +11,7 @@ const client = new elasticsearch.Client({
 });
 
 
+
 When(/^the client creates a POST request to \/users$/, function () {
     this.request = superagent('POST', process.env.SERVER_HOSTNAME + ':' + process.env.SERVER_PORT + '/users');
 });
@@ -132,7 +133,7 @@ Then(/^the payload of the response should be an? ([a-zA-Z0-9, ]+)$/, function (p
 Then(/^the payload object should be added to the database, grouped under the "([a-zA-Z]+)" type$/, function (type, callback) {
     this.type = type;
     client.get({
-        index: 'hobnob',
+        index: process.env.ELASTICSEARCH_INDEX,
         type: type,
         id: this.responsePayload,
     }).then((result) => {
@@ -143,7 +144,7 @@ Then(/^the payload object should be added to the database, grouped under the "([
 });
 Then(/^newly\-created user should be deleted$/, function (callback) {
     client.delete({
-        index: 'hobnob',
+        index: process.env.ELASTICSEARCH_INDEX,
         type: this.type,
         id: this.responsePayload,
     }).then((res) => {
