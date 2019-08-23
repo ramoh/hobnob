@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && npx babel src -d dist",
     "serve": "yarn run build && node dist/index.js",
-    "test:e2e": "cucumber-js spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
+    "test:e2e": "./scripts/e2e.test.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon -w src --exec yarn run serve",
     "fix": "eslint src --fix",
