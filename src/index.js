@@ -2,10 +2,16 @@ import '@babel/polyfill';
 import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
+import elasticsearch from 'elasticsearch';
 
 dotenv.config();
+const client = new elasticsearch.Client({
+    host: `${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
+});
+console.log(`${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`);
 
-const PAYLOAD_LIMIT = 1e6
+
+const PAYLOAD_LIMIT = 1e6;
 
 const app = express();
 
@@ -19,6 +25,7 @@ function checkEmptyPayload(req, res, next) {
         res.json({
             message: 'Payload should not be empty',
         });
+        return;
     }
     next();
 }
@@ -32,6 +39,8 @@ function checkContentTypeIsSet(req, res, next) {
         res.status(400);
         res.set('Content-Type', 'application/json');
         res.json({message: 'The "Content-Type" header must be set for requests with a non-empty payload'});
+        return;
+
     }
     next();
 
@@ -42,6 +51,7 @@ function checkContentTypeIsJson(req, res, next) {
         res.status(415);
         res.set('Content-Type', 'application/json');
         res.json({message: 'Content type header should always be JSON'});
+        return;
     }
     next();
 }
@@ -62,7 +72,7 @@ app.use((err, req, res, next) => {
     next();
 });
 
-app.post('/users', (req, res, next) => {
+app.post('/users', (req, res ) => {
     if (!Object.prototype.hasOwnProperty.call(req.body, 'email')
         || !Object.prototype.hasOwnProperty.call(req.body, 'password')) {
         res.status(400);
@@ -70,6 +80,7 @@ app.post('/users', (req, res, next) => {
         res.json({
             message: 'Payload must contain at least the email and password fields'
         });
+        return;
     }
     if (typeof req.body.email !== 'string' || typeof req.body.password !== 'string') {
         res.status(400);
@@ -83,7 +94,22 @@ app.post('/users', (req, res, next) => {
         res.json({message: 'The email field must be a valid email.'});
         return;
     }
-    next();
+    client.index({
+        index: 'hobnob',
+        type: 'user',
+        body: req.body,
+    }).then((result) => {
+        res.status(201);
+        res.set('Content-Type', 'text/plain');
+        res.send(result._id);
+        return;
+    }).catch(() => {
+        res.status(500);
+        res.set('Content-Type', 'application/json');
+        res.json({message: 'Internal Server Error'});
+        return;
+    });
+
 });
 
 

@@ -3,7 +3,7 @@ function getValidPayload(type) {
     switch (lowercaseType) {
         case 'create user':
             return {
-                email: 'e@mail.',
+                email: 'e@mail.com',
                 password: 'password'
             };
         default:
